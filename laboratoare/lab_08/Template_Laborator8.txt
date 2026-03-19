@@ -1,0 +1,223 @@
+-- LABORATOR 8 - SAPTAMANA 11
+
+1. 
+
+a) Să se afişeze informaţii (numele, salariul si codul departamentului) 
+despre angajaţii al căror salariu depăşeşte valoarea medie a salariilor 
+tuturor colegilor din companie.
+
+____
+
+
+b) Să se afişeze informaţii (numele, salariul si codul departamentului) 
+despre angajaţii al căror salariu depăşeşte valoarea medie a salariilor 
+colegilor săi de departament.
+
+____
+
+c) Analog cu cererea precedentă, afişându-se şi numele departamentului 
+şi media salariilor acestuia şi numărul de angajaţi.
+
+-- De ce varianta aceasta este gresita?
+-- Argumentati
+
+select last_name, salary, e.department_id, department_name, 
+       round(avg(salary)), count(employee_id)
+from employees e join departments d on (e.department_id = d.department_id)
+group by last_name, salary, e.department_id, department_name;  
+
+
+--Soluţia 1 (subcerere necorelată în clauza FROM)
+
+
+--Soluţia 2 (subcerere corelată în clauza SELECT)
+
+
+
+
+2.	Să se afişeze numele şi salariul angajaţilor al căror salariu 
+este mai mare decât salariile medii din toate departamentele. 
+Se cer 2 variante de rezolvare: cu operatorul ALL sau cu funcţia MAX.
+
+-- Varianta cu ALL
+SELECT last_name, salary 
+FROM employees 
+WHERE salary > all (select round(avg(salary))
+                    from employees 
+                    group by department_id
+                    ); -- subcererea calculeaza salariul mediu pentru fiecare departament
+
+
+-- Varianta cu functia MAX
+SELECT last_name, salary 
+FROM employees 
+WHERE salary > (select ROUND(max(avg(salary)))
+                from employees 
+                group by department_id
+                );
+
+
+
+3.	Sa se afiseze numele si salariul celor mai prost platiti angajati 
+din fiecare departament.
+
+-- Soluţia 1 (cu sincronizare):
+SELECT last_name, salary, department_id
+FROM employees e
+WHERE ____
+
+
+-- Soluţia 2 (fără sincronizare):
+SELECT last_name, salary, department_id  
+FROM employees
+WHERE (____) IN (SELECT ____) 
+                 FROM employees 
+                 GROUP BY department_id
+                 );
+
+
+-- Soluţia 3: Subcerere în clauza FROM 
+               
+SELECT last_name, salary, department_id  
+FROM employees  ____
+
+
+
+
+-- LABORATOR 8 - SAPTAMANA 12
+
+
+
+4.	Sa se obtina numele si salariul salariatilor care lucreaza intr-un departament 
+in care exista cel putin 1 angajat cu salariul egal cu 
+salariul maxim din departamentul 30.
+
+
+-- METODA 1 - IN
+
+
+-- METODA 2 - EXISTS
+
+
+
+
+-- DISCUTIE EXERCITIUL 8
+
+
+-- EX 9
+
+9. Să se afişeze codul, prenumele, numele şi data angajării, pentru angajatii condusi de Steven King 
+care au cea mai mare vechime dintre subordonatii lui Steven King. 
+Rezultatul nu va conţine angajaţii din anul 1970. 
+
+
+
+
+10. Sa se obtina numele angajaților care au cele mai mari 10 salarii din companie. 
+Rezultatul se va afişa în ordine crescătoare a salariilor.
+
+-- Solutia 1: subcerere sincronizată
+
+-- numaram cate salarii sunt mai mari decat linia la care a ajuns
+
+select last_name, salary
+from employees e
+where 10 >
+     (select count(salary) 
+      from employees
+      where e.salary < salary
+     );
+
+
+
+-- Solutia 2: analiza top-n 
+-- ESTE CORECTA VARIANTA URMATOARE?
+
+select employee_id, last_name, salary, rownum
+from employees
+where rownum <= 10
+order by salary desc;
+
+
+
+12.	Să se afişeze informaţii despre departamente, în formatul următor: 
+"Departamentul <department_name> este condus de {<manager_id> | nimeni} 
+şi {are numărul de salariaţi  <n> | nu are salariati}".
+
+
+
+17. Sa se afiseze salariatii care au fost angajati în aceeaşi zi a lunii 
+în care cei mai multi dintre salariati au fost angajati 
+(ziua lunii insemnand numarul zilei, indiferent de luna si an).
+
+
+
+
+5.	Să se afişeze codul, numele şi prenumele angajaţilor care au cel puţin doi subalterni. 
+
+a)
+
+select employee_id, last_name, first_name
+from employees mgr
+where 1 < (select count(employee_id)
+           from employees
+           where mgr.employee_id = manager_id
+          );
+
+--SAU:
+select employee_id, last_name, first_name
+from employees e join (select manager_id, count(*) 
+                       from employees 
+                       group by manager_id
+                       having count(*) >= 2
+                       ) man
+on e.employee_id = man.manager_id;
+
+
+b) Cati subalterni are fiecare angajat? Se vor afisa codul, numele, prenumele si numarul de subalterni.
+Daca un angajat nu are subalterni, o sa se afiseze 0 (zero). 
+
+
+select employee_id, last_name, first_name
+___
+
+
+
+6.	Să se determine locaţiile în care se află cel puţin un departament.
+
+-- REZOLVATI
+-- CEREREA TREBUIE SA AFISEZE 7 LOCATII 
+-- VEZI IMAGINEAZA ATASATA IN LABORATOR
+
+-- METODA 1 - IN (care este echivalent cu  = ANY )         
+
+
+-- METODA 2 - EXISTS
+
+
+
+7.	Să se determine departamentele în care nu există niciun angajat.
+
+-- REZOLVATI
+-- CEREREA TREBUIE SA RETURNEZE 16 DEPARTAMENTE
+-- VEZI IMAGINEAZA ATASATA IN LABORATOR
+
+-- METODA 1 - UTILIZAND NOT IN 
+
+SELECT department_id, department_name
+FROM departments d
+WHERE ___ NOT IN (SELECT ____
+                  FROM ____
+                  );
+
+
+-- METODA 2 - UTILIZAND NOT EXISTS
+
+SELECT department_id, department_name
+FROM departments d
+WHERE ___ (SELECT 
+           FROM 
+          );
+
+
+
