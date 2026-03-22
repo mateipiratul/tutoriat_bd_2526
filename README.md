@@ -20,3 +20,5 @@ ls
 | `diagrama_hr.pdf` | Diagrama E/R de referință a cursului |
 | `tema_curs/` | Exemplu de temă de curs *(specific seriei 15)* |
 | `tema_laborator/` | Exemplu de temă de laborator *(specific seriei 15)* |
+
+În primul semestru din anul II, veți avea printre alte materii și SGBD *(Sisteme de Gestionare a Bazelor de Date)*, la care veți avea de realizat un proiect puțin mai complex, dar care este ancorat la bază în conceptele învățate la BD. [https://github.com/mateipiratul/hltv_db/blob/main/documentatie_bd_hltv.pdf](https://github.com/mateipiratul/hltv_db/blob/main/documentatie_bd_hltv.pdf) este un exemplu de documentație pentru un proiect de SGBD, care poate fi folosit ca reper pentru structura și conținutul așteptat.
